@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jon Gibson — Digital Arts Portfolio</title><!-- ✏️ your name -->
+
+<!-- ═══════════════════════════════════════════════════════════
+     STEP 1: CHANGE YOUR FONTS
+     Visit fonts.google.com, pick two fonts, click "Get embed code"
+     and paste the <link> line here to replace this one.
+═══════════════════════════════════════════════════════════ -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- Swiper.js -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<!-- AOS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+
+<style>
+/* ═══════════════════════════════════════════════════════════
+   STEP 2: CUSTOMIZE YOUR COLORS, FONTS & RATIOS
+   Change the values below — your whole portfolio updates instantly.
+═══════════════════════════════════════════════════════════ */
+:root {
+    --bg-primary:    #0d0d0d;   /* ✏️ main background */
+    --bg-secondary:  #1a1a1a;   /* ✏️ card / section background */
+    --accent:        #e8c547;   /* ✏️ highlight / accent color */
+    --accent-hover:  #f0d060;   /* ✏️ accent on hover */
+    --text-primary:  #f0f0f0;   /* ✏️ main text */
+    --text-muted:    #888888;   /* ✏️ secondary text */
+    --border:        #2a2a2a;   /* ✏️ border color */
+
+    /* ✏️ update font names to match your Google Fonts choice */
+    --font-heading: 'Playfair Display', serif;
+    --font-body:    'Inter', sans-serif;
+
+    /* ✏️ Gallery 1 image shape (landscape gallery)
+       Options:  16/9  |  4/3  |  1/1  |  3/4 */
+    --gallery-ratio-landscape: 16/9;
+
+    /* ✏️ Gallery 2 image shape (portrait gallery)
+       Options:  16/9  |  4/3  |  1/1  |  3/4 */
+    --gallery-ratio-portrait: 3/4;
+
+    /* Default before/after ratio — used when a project has no ratio set. */
+    --ba-ratio: 16/9;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; }
+
+/* ── NAV ── */
+nav {
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    padding: 1.2rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: background .3s, backdrop-filter .3s;
+}
+nav.scrolled { background: rgba(13,13,13,.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+.nav-logo { font-family: var(--font-heading); font-size: 1.4rem; color: var(--accent); text-decoration: none; }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { color: var(--text-muted); text-decoration: none; font-size: .9rem; letter-spacing: .05em; transition: color .2s; }
+.nav-links a:hover { color: var(--accent); }
+
+/* ── HERO ── */
+#hero {
+    position: relative; overflow: hidden;
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 2rem;
+    background: radial-gradient(ellipse at center, #1a1a2e 0%, var(--bg-primary) 70%);
+}
+#tsparticles { position: absolute; inset: 0; z-index: 0; }
+.hero-inner { position: relative; z-index: 1; max-width: 800px; }
+.hero-tag { font-size: .8rem; letter-spacing: .2em; color: var(--accent); text-transform: uppercase; margin-bottom: 1.5rem; }
+.hero-name { font-family: var(--font-heading); font-size: clamp(3rem, 8vw, 6rem); line-height: 1.1; margin-bottom: 1.5rem; }
+.hero-name span { color: var(--accent); }
+.hero-tagline { font-size: 1.1rem; color: var(--text-muted); max-width: 500px; margin: 0 auto 2.5rem; }
+.hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.btn-primary { background: var(--accent); color: #000; padding: .85rem 2rem; border-radius: 4px; text-decoration: none; font-weight: 600; font-size: .9rem; transition: background .2s, transform .2s; }
+.btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); }
+.btn-outline { border: 1px solid var(--accent); color: var(--accent); padding: .85rem 2rem; border-radius: 4px; text-decoration: none; font-weight: 500; font-size: .9rem; transition: background .2s, transform .2s; }
+.btn-outline:hover { background: rgba(232,197,71,.1); transform: translateY(-2px); }
+
+/* ── SECTIONS ── */
+section { padding: 100px 2rem; }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+.section-label { font-size: .75rem; letter-spacing: .2em; color: var(--accent); text-transform: uppercase; margin-bottom: .75rem; }
+.section-title { font-family: var(--font-heading); font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1rem; }
+.section-divider { width: 60px; height: 3px; background: var(--accent); margin-bottom: 3rem; }
+
+/* Gallery sub-heading — sits between the two galleries */
+.gallery-sub-heading {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: .5rem;
+    padding-top: 1rem;
+}
+.gallery-sub-label {
+    font-size: .7rem; letter-spacing: .18em;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 1.5rem; display: block;
+}
+.gallery-separator {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 4rem 0;
+}
+
+/* ── ABOUT ── */
+#about { background: var(--bg-secondary); }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+.about-img img { width: 100%; border-radius: 8px; border: 1px solid var(--border); }
+.about-text p { color: var(--text-muted); margin-bottom: 1.2rem; }
+.tool-tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 2rem; }
+.tool-tag { background: rgba(232,197,71,.1); border: 1px solid rgba(232,197,71,.3); color: var(--accent); font-size: .8rem; padding: .35rem .85rem; border-radius: 20px; }
+
+/* ── GALLERY (shared styles) ── */
+.swiper { width: 100%; padding-bottom: 50px; }
+.swiper-slide { background: var(--bg-secondary); border-radius: 8px; overflow: hidden; border: 1px solid var(--border); cursor: pointer; }
+
+.slide-img-wrap {
+    width: 100%; overflow: hidden;
+    position: relative; cursor: pointer;
+}
+.slide-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s ease; }
+.swiper-slide:hover .slide-img-wrap img { transform: scale(1.04); }
+.slide-img-wrap::after {
+    content: '🔍 Click to expand';
+    position: absolute; bottom: 10px; right: 10px;
+    background: rgba(0,0,0,.7); color: var(--accent);
+    font-size: .7rem; letter-spacing: .06em;
+    padding: 4px 10px; border-radius: 3px;
+    opacity: 0; transition: opacity .25s ease; pointer-events: none;
+}
+.slide-img-wrap:hover::after { opacity: 1; }
+
+/* Gallery 1 — landscape ratio */
+#gallery-landscape .slide-img-wrap { aspect-ratio: var(--gallery-ratio-landscape); }
+
+/* Gallery 2 — portrait ratio */
+#gallery-portrait .slide-img-wrap { aspect-ratio: var(--gallery-ratio-portrait); }
+
+.slide-info { padding: 1.5rem; }
+.slide-category { font-size: .75rem; letter-spacing: .15em; color: var(--accent); text-transform: uppercase; margin-bottom: .5rem; }
+.slide-info h3 { font-family: var(--font-heading); font-size: 1.3rem; margin-bottom: .5rem; }
+.slide-info p { color: var(--text-muted); font-size: .9rem; }
+.swiper-pagination-bullet { background: var(--accent); }
+.swiper-button-next, .swiper-button-prev { color: var(--accent); }
+
+/* ══════════════════════════════════════════
+   LIGHTBOX
+══════════════════════════════════════════ */
+#lightbox {
+    position: fixed; inset: 0; z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0); opacity: 0; pointer-events: none;
+    transition: opacity .3s ease, background .3s ease;
+}
+#lightbox.open { opacity: 1; pointer-events: auto; background: rgba(0,0,0,.92); }
+.lb-close {
+    position: absolute; top: 1.25rem; right: 1.5rem;
+    background: none; border: none; color: var(--text-muted);
+    font-size: 2rem; line-height: 1; cursor: pointer;
+    transition: color .2s, transform .2s; z-index: 10001;
+}
+.lb-close:hover { color: var(--accent); transform: rotate(90deg); }
+.lb-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+    color: var(--text-primary); width: 52px; height: 52px; border-radius: 50%;
+    font-size: 1.4rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background .2s, color .2s; z-index: 10001;
+}
+.lb-arrow:hover { background: var(--accent); color: #000; }
+.lb-prev { left: 1.5rem; } .lb-next { right: 1.5rem; }
+.lb-content {
+    display: flex; flex-direction: column; align-items: center;
+    max-width: 90vw; max-height: 90vh;
+    transform: scale(0.94); transition: transform .3s ease;
+}
+#lightbox.open .lb-content { transform: scale(1); }
+.lb-img-wrap { max-width: 90vw; max-height: 75vh; border-radius: 6px; overflow: hidden; box-shadow: 0 25px 80px rgba(0,0,0,.7); }
+.lb-img-wrap img { display: block; max-width: 90vw; max-height: 75vh; width: auto; height: auto; object-fit: contain; border-radius: 6px; }
+.lb-meta { margin-top: 1.25rem; text-align: center; width: 100%; max-width: 680px; }
+.lb-category { font-size: .7rem; letter-spacing: .18em; color: var(--accent); text-transform: uppercase; margin-bottom: .35rem; }
+.lb-title { font-family: var(--font-heading); font-size: 1.5rem; color: var(--text-primary); margin-bottom: .4rem; }
+.lb-desc { font-size: .9rem; color: var(--text-muted); line-height: 1.6; }
+.lb-counter { margin-top: .75rem; font-size: .75rem; color: #555; letter-spacing: .1em; }
+
+/* ── BEFORE / AFTER ── */
+#before-after { background: var(--bg-secondary); }
+.ba-project-tabs { display: flex; gap: .75rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+.ba-tab { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: .55rem 1.4rem; border-radius: 4px; cursor: pointer; font-family: var(--font-body); font-size: .9rem; transition: all .2s; }
+.ba-tab.active, .ba-tab:hover { border-color: var(--accent); color: var(--accent); background: rgba(232,197,71,.08); }
+.ba-wrapper { position: relative; width: 100%; max-width: 860px; aspect-ratio: var(--ba-ratio); margin: 0 auto; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); user-select: none; }
+
+/* ── SLIDER EFFECT ── */
+.ba-wrapper.mode-slider .ba-before, .ba-wrapper.mode-slider .ba-after { position: absolute; inset: 0; }
+.ba-wrapper.mode-slider .ba-before { z-index: 1; }
+.ba-wrapper.mode-slider .ba-after  { z-index: 2; clip-path: inset(0 50% 0 0); }
+.ba-wrapper.mode-slider .ba-before img, .ba-wrapper.mode-slider .ba-after img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ba-handle { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 44px; height: 100%; z-index: 3; cursor: ew-resize; display: flex; align-items: center; justify-content: center; }
+.ba-handle-line { width: 3px; height: 100%; background: var(--accent); }
+.ba-handle-circle { position: absolute; width: 44px; height: 44px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; color: #000; font-size: 1.1rem; font-weight: 700; box-shadow: 0 2px 12px rgba(0,0,0,.4); }
+
+/* ── WIPE EFFECT ── */
+.ba-wrapper.mode-wipe .ba-before, .ba-wrapper.mode-wipe .ba-after { position: absolute; inset: 0; }
+.ba-wrapper.mode-wipe .ba-before img, .ba-wrapper.mode-wipe .ba-after img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ba-wrapper.mode-wipe .ba-after { clip-path: inset(0 100% 0 0); animation: wipe-anim 3s ease-in-out infinite alternate; }
+@keyframes wipe-anim { 0% { clip-path: inset(0 100% 0 0); } 40% { clip-path: inset(0 0% 0 0); } 60% { clip-path: inset(0 0% 0 0); } 100% { clip-path: inset(0 100% 0 0); } }
+
+/* ── HOVER EFFECT ── */
+.ba-wrapper.mode-hover .ba-before, .ba-wrapper.mode-hover .ba-after { position: absolute; inset: 0; }
+.ba-wrapper.mode-hover .ba-before img, .ba-wrapper.mode-hover .ba-after img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ba-wrapper.mode-hover .ba-after { opacity: 0; transition: opacity .5s ease; }
+.ba-wrapper.mode-hover:hover .ba-after { opacity: 1; }
+
+/* ── FLIP EFFECT ── */
+.ba-wrapper.mode-flip { perspective: 1200px; cursor: pointer; }
+.flip-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform .7s cubic-bezier(.4,0,.2,1); }
+.ba-wrapper.mode-flip.flipped .flip-inner { transform: rotateY(180deg); }
+.flip-front, .flip-back { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.flip-front img, .flip-back img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.flip-back { transform: rotateY(180deg); }
+.ba-label { position: absolute; top: 12px; padding: 4px 12px; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; border-radius: 3px; z-index: 10; background: rgba(0,0,0,.65); color: var(--accent); pointer-events: none; }
+.label-before { left: 12px; } .label-after { right: 12px; }
+.ba-caption { text-align: center; margin-top: 1.2rem; color: var(--text-muted); font-size: .9rem; font-style: italic; }
+
+/* ── CONTACT ── */
+#contact { text-align: center; }
+.contact-email { font-family: var(--font-heading); font-size: 1.4rem; color: var(--accent); text-decoration: none; display: inline-block; margin-bottom: 2rem; }
+.social-links { display: flex; gap: 1.5rem; justify-content: center; }
+.social-links a { color: var(--text-muted); text-decoration: none; transition: color .2s; }
+.social-links a:hover { color: var(--accent); }
+
+/* ── FOOTER ── */
+footer { background: var(--bg-secondary); border-top: 1px solid var(--border); padding: 2rem; text-align: center; color: var(--text-muted); font-size: .85rem; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .nav-links { display: none; }
+    .lb-arrow { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ LIGHTBOX ═══ -->
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Image lightbox">
+    <button class="lb-close" id="lb-close" aria-label="Close">&times;</button>
+    <button class="lb-arrow lb-prev" id="lb-prev" aria-label="Previous">&#8592;</button>
+    <button class="lb-arrow lb-next" id="lb-next" aria-label="Next">&#8594;</button>
+    <div class="lb-content">
+        <div class="lb-img-wrap"><img id="lb-img" src="" alt="">
+		<video id="lb-video" src="" controls
+           style="display:none;max-width:90vw;max-height:75vh;border-radius:6px;"></video>
+		</div>
+        <div class="lb-meta">
+            <p class="lb-category" id="lb-category"></p>
+            <h2 class="lb-title"   id="lb-title"></h2>
+            <p class="lb-desc"     id="lb-desc"></p>
+            <p class="lb-counter"  id="lb-counter"></p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ NAV ═══ -->
+<nav id="navbar">
+    <a href="#hero" class="nav-logo">Jon Gibson</a><!-- ✏️ your name -->
+    <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Work</a></li>
+        <li><a href="#before-after">Process</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+    <div id="tsparticles"></div>
+    <div class="hero-inner" data-aos="fade-up">
+        <p class="hero-tag">Digital Arts Portfolio</p>
+        <h1 class="hero-name">Your<br><span>Jon Gibson's</span></h1><!-- ✏️ your name -->
+        <p class="hero-tagline">A digital artist passionate about visual storytelling and creative design.</p><!-- ✏️ tagline -->
+        <div class="hero-btns">
+            <a href="#projects" class="btn-primary">View My Work</a>
+            <a href="#contact"  class="btn-outline">Get In Touch</a>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ ABOUT ═══ -->
+<section id="about">
+    <div class="section-inner">
+        <div class="about-grid">
+            <div class="about-img" data-aos="fade-right">
+                <!-- ✏️ replace your-photo.jpg — must be in the images/ folder -->
+                <img src="images/selfPortraitWhite.png" alt="Photo of me"
+                     onerror="this.style.background='#1a1a1a';this.style.minHeight='350px';">
+            </div>
+            <div class="about-text" data-aos="fade-left">
+                <p class="section-label">About Me</p>
+                <h2 class="section-title">The Artist<br>Behind the Work</h2>
+                <div class="section-divider"></div>
+                <!-- ✏️ replace both paragraphs with your own bio -->
+                <p>Music inspires and informs my artwork and designs. Picking a group of songs for a project is as important as any other part of my design/creative process.</p>
+                <p>Album artwork and watercolor paintings are my two favorite artforms to observe. John Singer Sargent is my favorite watercolorist and Metallica, Baroness, Mastodon, and Deftones have created my favorite album artwork.</p>
+                <!-- ✏️ update these to reflect the software you actually use -->
+                <div class="tool-tags">
+                    <span class="tool-tag">Adobe Photoshop</span>
+                    <span class="tool-tag">Adobe Illustrator</span>
+                    <span class="tool-tag">Drawing/Painting</span>
+                    <span class="tool-tag">After Effects</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PROJECTS — TWO GALLERIES
+     Gallery 1: Landscape work  (controlled by galleryLandscapeEffect + --gallery-ratio-landscape)
+     Gallery 2: Portrait work   (controlled by galleryPortraitEffect  + --gallery-ratio-portrait)
+═══════════════════════════════════════════════════════════ -->
+<section id="projects">
+    <div class="section-inner">
+
+        <p class="section-label" data-aos="fade-up">Selected Work</p>
+        <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">My Projects</h2><!-- ✏️ optional: rename -->
+        <div class="section-divider" data-aos="fade-up" data-aos-delay="200"></div>
+
+        <!-- ─────────────────────────────────────────
+             GALLERY 1 — LANDSCAPE
+        ───────────────────────────────────────── -->
+        <p class="gallery-sub-label" data-aos="fade-up">Gallery One</p>
+        <h3 class="gallery-sub-heading" data-aos="fade-up" data-aos-delay="80">Landscape Work</h3><!-- ✏️ rename this gallery -->
+
+        <div class="swiper" id="gallery-landscape" data-aos="fade-up" data-aos-delay="200">
+            <div class="swiper-wrapper">
+
+                <!-- ✏️ LANDSCAPE PROJECT 1 -->
+                <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Drawing"
+                     data-title="Bird of Paradise"
+                     data-desc="A color pencil drawing of a Bird of Paradise.">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Landscape/BirdofParadise_Landscape.jpg" alt="Urban Reflections"
+                             onerror="this.src='https://placehold.co/1200x675/1a1a1a/888?text=Add+landscape1.jpg+to+images+folder';">
+                    </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Drawing</p><!-- ✏️ category -->
+                        <h3>Bird of Paradise</h3><!-- ✏️ title -->
+                        <p>A color pencil drawing of a Bird of Paradise.</p><!-- ✏️ description -->
+                    </div>
+                </div>
+
+                <!-- ✏️ LANDSCAPE PROJECT 2 -->
+                <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Drawing"
+                     data-title="Jack Laying Down"
+                     data-desc="A portrait of Jack, the Wheaton Terrier, laying on his bed.">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Landscape/Jack_081416_Landscape.jpg" alt="Poster Campaign"
+                             onerror="this.src='https://placehold.co/1200x675/1a1a1a/888?text=Image+not+found';">
+                    </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Drawing</p>
+                        <h3>Jack Laying Down</h3>
+                        <p>A portrait of Jack, the Wheaton Terrier, laying on his bed.</p>
+                    </div>
+                </div>
+
+                <!-- ✏️ LANDSCAPE PROJECT 3 -->
+                <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Drawing"
+                     data-title="Hovering Hummingbird"
+                     data-desc="A drawing of a hummingbird hovering in my backyard.">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Landscape/hummingbird_Landscape.jpg" alt="Widescreen Concept"
+                             onerror="this.src='https://placehold.co/1200x675/1a1a1a/888?text=Image+not+found';">
+                    </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Drawing</p>
+                        <h3>Hovering Hummingbird</h3>
+                        <p>A drawing of a hummingbird hovering in my backyard.</p>
+                    </div>
+                </div>
+				
+				<!-- ✏️ LANDSCAPE PROJECT 4 -->
+                <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Drawing"
+                     data-title="Panda Eating Bamboo"
+                     data-desc="A drawing of a panda eating bamboo.">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Landscape/pandaLandscape.jpg" alt="Widescreen Concept"
+                             onerror="this.src='https://placehold.co/1200x675/1a1a1a/888?text=Image+not+found';">
+                    </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Drawing</p>
+                        <h3>Panda Eating Bamboo</h3>
+                        <p>A drawing of a panda eating bamboo.</p>
+                    </div>
+                </div>
+				
+				<!-- ✏️ LANDSCAPE PROJECT 5 -->
+              <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Illustrator"
+                     data-title="Recycle Day Advertisement"
+                     data-desc="A design of the Santa Ana Recycling Day postcard.">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Landscape/RecyclePoster_Landscape.jpg" alt="Widescreen Concept"
+                             onerror="this.src='https://placehold.co/1200x675/1a1a1a/888?text=Image+not+found';">
+                  </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Illustrator</p>
+                        <h3>Recycle Day Advertisement</h3>
+                        <p>A design of the Santa Ana Recycling Day postcard.</p>
+                    </div>
+                </div>
+				
+				<!-- ✏️ LANDSCAPE PROJECT 6 -->
+              <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Photoshop"
+                     data-title="Remembrance Day Card - Zeus the Dog"
+                     data-desc="A remembrance card design to honor our loved ones.">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Landscape/Remembrance_Zeus.jpg" alt="Widescreen Concept"
+                             onerror="this.src='https://placehold.co/1200x675/1a1a1a/888?text=Image+not+found';">
+                  </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Photoshop</p>
+                        <h3>Remembrance Day Card - Zeus the Dog</h3>
+                        <p>A remembrance card design to honor our loved ones.</p>
+                    </div>
+              </div>
+				
+				<!-- ✏️ LANDSCAPE PROJECT 7 -->
+              <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Photoshop"
+                     data-title="Business Card Design"
+                     data-desc="A business card design for a BBQ company called the Que.">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Landscape/businessCardTheQue.jpg" alt="Widescreen Concept"
+                             onerror="this.src='https://placehold.co/1200x675/1a1a1a/888?text=Image+not+found';">
+                  </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Photoshop</p>
+                        <h3>Business Card Design</h3>
+                        <p>A business card design for a BBQ company called the Que.</p>
+                    </div>
+              </div>
+				
+				<!-- ✏️ LANDSCAPE PROJECT 8 -->
+              <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Illustrator"
+                     data-title="Reflection Drawing - Mandala/Henna Sticker/Tattoo"
+                     data-desc="A design of a pattern for a tattoo or sticker.">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Landscape/hennaPattern.png" alt="Widescreen Concept"
+                             onerror="this.src='https://placehold.co/1200x675/1a1a1a/888?text=Image+not+found';">
+                  </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Illustrator</p>
+                        <h3>Reflection Drawing - Mandala/Henna Sticker/Tattoo</h3>
+                        <p>A design of a pattern for a tattoo or sticker.</p>
+                    </div>
+              </div>
+				
+				<!-- ✏️ LANDSCAPE PROJECT 9 -->
+              <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Illustrator"
+                     data-title="Hawaiian Island - Volcano Erupting"
+                     data-desc="A design of a Hawaiian night sky with magma flowing.">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Landscape/BigIslandMagma.png" alt="Widescreen Concept"
+                             onerror="this.src='https://placehold.co/1200x675/1a1a1a/888?text=Image+not+found';">
+                  </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Illustrator</p>
+                        <h3>Hawaiian Island - Volcano Erupting</h3>
+                        <p>A design of a Hawaiian night sky with magma flowing.</p>
+                    </div>
+              </div>
+				
+				<!-- ✏️ LANDSCAPE PROJECT 10 -->
+              <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Illustrator"
+                     data-title="Regular Sticker - Ear Cheese"
+                     data-desc="A design of regular-shaped sticker.">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Landscape/earCheeseSticker.png" alt="Widescreen Concept"
+                             onerror="this.src='https://placehold.co/1200x675/1a1a1a/888?text=Image+not+found';">
+                  </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Illustrator</p>
+                        <h3>Regular Sticker - Ear Cheese</h3>
+                        <p>A design of regular-shaped sticker.</p>
+                    </div>
+              </div>
+				
+				<!-- ✏️ LANDSCAPE PROJECT 11 -->
+              <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Photoshop"
+                     data-title="Remembrance Card for Jack"
+                     data-desc="A remembrance card design for our beloved Wheaten Terrier, Jack.">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Landscape/Jack_Remembrance.jpg" alt="Widescreen Concept"
+                             onerror="this.src='https://placehold.co/1200x675/1a1a1a/888?text=Image+not+found';">
+                  </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Photoshop</p>
+                        <h3>Remembrance Card for Jack</h3>
+                        <p>A remembrance card design for our beloved Wheaten Terrier, Jack.</p>
+                    </div>
+              </div>
+
+				<!-- ✏️ LANDSCAPE PROJECT 12 -->
+              <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="After Effects"
+                     data-title="Shattered Glass Effect"
+                     data-desc="A short demonstration of a cracked/shattered glass effect in After Effects.">
+                    <div class="slide-img-wrap">
+                        <video src="images/Cracked-Text-Effect.mp4" autoplay muted loop playsinline
+							   style="width:100%; height:100%; object-fit:cover; display:block;"
+                             onerror="this.src='https://placehold.co/1200x675/1a1a1a/888?text=Image+not+found';">
+						</video>
+                  </div>
+                    <div class="slide-info">
+                        <p class="slide-category">After Effects</p>
+                        <h3>Shattered Glass Effect</h3>
+                        <p>A short demonstration of a cracked/shattered glass effect in After Effects.</p>
+                    </div>
+              </div>
+
+                <!-- ✏️ Copy a landscape project block above and paste here to add more -->
+
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+
+        <!-- Divider between galleries -->
+        <hr class="gallery-separator">
+
+        <!-- ─────────────────────────────────────────
+             GALLERY 2 — PORTRAIT
+        ───────────────────────────────────────── -->
+        <p class="gallery-sub-label" data-aos="fade-up">Gallery Two</p>
+        <h3 class="gallery-sub-heading" data-aos="fade-up" data-aos-delay="80">Portrait Work</h3><!-- ✏️ rename this gallery -->
+
+        <div class="swiper" id="gallery-portrait" data-aos="fade-up" data-aos-delay="200">
+            <div class="swiper-wrapper">
+
+                <!-- ✏️ PORTRAIT PROJECT 1 -->
+                <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Drawing"
+                     data-title="Bosco Waiting for Food"
+                     data-desc="My first drawing of a dog - my sister's dog Bosco">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Portrait/bosco_Portrait.jpg" alt="Character Design Series"
+                             onerror="this.src='https://placehold.co/800x1067/1a1a1a/888?text=Image+not+found';">
+                    </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Drawing</p><!-- ✏️ category -->
+                        <h3>Bosco Waiting for Food</h3><!-- ✏️ title -->
+                        <p>My first drawing of a dog - my sister's dog Bosco</p><!-- ✏️ description -->
+                    </div>
+                </div>
+
+                <!-- ✏️ PORTRAIT PROJECT 2 -->
+                <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Drawing"
+                     data-title="Portrait Study of a Kingfisher Bird"
+                     data-desc="A color pencil drawing of a kingfisher bird from a reference photo.">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Portrait/kingfisher_Portrait.jpg" alt="Portrait Study"
+                             onerror="this.src='https://placehold.co/800x1067/1a1a1a/888?text=Image+not+found';">
+                    </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Drawing</p>
+                        <h3>Portrait Study of a Kingfisher Bird</h3>
+                        <p>A color pencil drawing of a kingfisher bird from a reference photo.</p>
+                    </div>
+                </div>
+
+                <!-- ✏️ PORTRAIT PROJECT 3 -->
+                <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Drawing"
+                     data-title="Skull Study"
+                     data-desc="A drawing of a skull for anatomy study.">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Portrait/skull_Portrait.jpg" alt="Vertical Frame"
+                             onerror="this.src='https://placehold.co/800x1067/1a1a1a/888?text=Image+not+found';">
+                    </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Drawing</p>
+                        <h3>Skull Study</h3>
+                        <p>A drawing of a skull for anatomy study.</p>
+                    </div>
+                </div>
+				
+				<!-- ✏️ PORTRAIT PROJECT 4 -->
+                <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Illustrator"
+                     data-title="Deftones Single Cover Artwork"
+                     data-desc="An illustration of what the album artwork might be for a song.">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Portrait/AlbumCover_Deftones_HoleInEarth.png" alt="Vertical Frame"
+                             onerror="this.src='https://placehold.co/800x1067/1a1a1a/888?text=Image+not+found';">
+                    </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Illustrator</p>
+                        <h3>Deftones Single Cover Artwork</h3>
+                        <p>An illustration of what the album artwork might be for a song.</p>
+                    </div>
+                </div>
+				
+				<!-- ✏️ PORTRAIT PROJECT 5 -->
+              <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Photoshop"
+                     data-title="Labor Day Commemorative Stamp"
+                     data-desc="A design celebrating (commemorating) a significant labor leader.">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Portrait/CommemorativeStamp.png" alt="Vertical Frame"
+                             onerror="this.src='https://placehold.co/800x1067/1a1a1a/888?text=Image+not+found';">
+                  </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Photoshop</p>
+                        <h3>Labor Day Commemorative Stamp</h3>
+                        <p>A design celebrating (commemorating) a significant labor leader.</p>
+                    </div>
+                </div>
+				
+				<!-- ✏️ PORTRAIT PROJECT 6 -->
+              <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Photoshop"
+                     data-title="Postcard from Hawaii"
+                     data-desc="A Hawaiian themed postcard design.">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Portrait/HawaiiPostcard.jpg" alt="Vertical Frame"
+                             onerror="this.src='https://placehold.co/800x1067/1a1a1a/888?text=Image+not+found';">
+                  </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Photoshop</p>
+                        <h3>Postcard from Hawaii</h3>
+                        <p>A Hawaiian themed postcard design.</p>
+                    </div>
+              </div>
+				
+				<!-- ✏️ PORTRAIT PROJECT 7 -->
+              <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Photoshop"
+                     data-title="Dancing with the Staff Poster Design"
+                     data-desc="A poster designed for the school event Dancing with the Staff.">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Portrait/DancingStaff.jpg" alt="Vertical Frame"
+                             onerror="this.src='https://placehold.co/800x1067/1a1a1a/888?text=Image+not+found';">
+                  </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Photoshop</p>
+                        <h3>Dancing with the Staff Poster Design</h3>
+                        <p>A poster designed for the school event Dancing with the Staff.</p>
+                    </div>
+              </div>
+				
+				<!-- ✏️ PORTRAIT PROJECT 8 -->
+              <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Photoshop"
+                     data-title="Homecoming Game Poster"
+                     data-desc="A poster designed for the Saddleback homecoming football game.">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Portrait/HomecomingGamePoster.jpg" alt="Vertical Frame"
+                             onerror="this.src='https://placehold.co/800x1067/1a1a1a/888?text=Image+not+found';">
+                  </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Photoshop</p>
+                        <h3>Homecoming Game Poster</h3>
+                        <p>A poster designed for the Saddleback homecoming football game.</p>
+                    </div>
+              </div>
+				
+				<!-- ✏️ PORTRAIT PROJECT 9 -->
+              <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Photoshop"
+                     data-title="Guardians of the Galaxy Poster"
+                     data-desc="A poster designed for the movie Guardians of the Galaxy.">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Portrait/GOTGPoster.png" alt="Vertical Frame"
+                             onerror="this.src='https://placehold.co/800x1067/1a1a1a/888?text=Image+not+found';">
+                  </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Photoshop</p>
+                        <h3>Guardians of the Galaxy Poster</h3>
+                        <p>A poster designed for the movie Guardians of the Galaxy.</p>
+                    </div>
+              </div>
+				
+				<!-- ✏️ PORTRAIT PROJECT 10 -->
+              <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Photoshop"
+                     data-title="Car Race Medical Flyer"
+                     data-desc="A flyer designed to solicit business from car racers for back pain relief.">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Portrait/RallyFlyer.jpg" alt="Vertical Frame"
+                             onerror="this.src='https://placehold.co/800x1067/1a1a1a/888?text=Image+not+found';">
+                  </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Photoshop</p>
+                        <h3>Car Race Medical Flyer</h3>
+                        <p>A flyer designed to solicit business from car racers for back pain relief.</p>
+                    </div>
+              </div>
+				
+				<!-- ✏️ PORTRAIT PROJECT 11 -->
+              <div class="swiper-slide" onclick="window.__lbOpen(this)"
+                     data-category="Illustrator"
+                     data-title="Tattoo Event Poster"
+                     data-desc="A poster designed for a tattoo event.">
+                    <div class="slide-img-wrap">
+                        <img src="images/_Portrait/tattooParty_Flyer.png" alt="Vertical Frame"
+                             onerror="this.src='https://placehold.co/800x1067/1a1a1a/888?text=Image+not+found';">
+                  </div>
+                    <div class="slide-info">
+                        <p class="slide-category">Illustrator</p>
+                        <h3>Tattoo Event Poster</h3>
+                        <p>A poster designed for a tattoo event.</p>
+                    </div>
+              </div>
+
+
+                <!-- ✏️ Copy a portrait project block above and paste here to add more -->
+
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ═══ BEFORE / AFTER ═══ -->
+<section id="before-after">
+    <div class="section-inner">
+        <p class="section-label" data-aos="fade-up">Creative Process</p>
+        <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">Before &amp; After</h2>
+        <div class="section-divider" data-aos="fade-up" data-aos-delay="200"></div>
+        <p style="color:var(--text-muted);margin-bottom:2rem;" data-aos="fade-up" data-aos-delay="300">
+            See the transformation from initial concept to finished piece.<!-- ✏️ optional -->
+        </p>
+        <div class="ba-project-tabs" data-aos="fade-up" data-aos-delay="350">
+            <button class="ba-tab active" onclick="switchBAProject(0)">Car Color Change</button><!-- ✏️ rename -->
+            <button class="ba-tab"        onclick="switchBAProject(1)">Blue Baby</button>
+            <button class="ba-tab"        onclick="switchBAProject(2)">Colorize Black & White Photo</button>
+			<button class="ba-tab"        onclick="switchBAProject(3)">Tribal Hands</button>
+        </div>
+        <div id="ba-container" data-aos="fade-up" data-aos-delay="400"></div>
+        <p class="ba-caption" id="ba-caption"></p>
+    </div>
+</section>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact">
+    <div class="section-inner">
+        <p class="section-label" data-aos="fade-up">Get In Touch</p>
+        <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">Let's Connect</h2>
+        <div class="section-divider" style="margin:0 auto 2rem;" data-aos="fade-up" data-aos-delay="200"></div>
+        <p style="color:var(--text-muted);margin-bottom:2rem;" data-aos="fade-up" data-aos-delay="250">Interested in my work or want to collaborate? Reach out!</p>
+        <!-- ✏️ your email — appears twice -->
+        <a href="mailto:jonathan.gibson@sausd.us" class="contact-email" data-aos="fade-up" data-aos-delay="300">jonathan.gibson@sausd.us</a>
+        <div class="social-links" data-aos="fade-up" data-aos-delay="400">
+            <!-- ✏️ replace # with your profile URLs. Remove links you don't use. -->
+            <a href="#">Behance</a>
+            <a href="#">Instagram</a>
+            <a href="#">LinkedIn</a>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+    <p>&copy; 2025 Jon Gibson. All rights reserved.</p><!-- ✏️ year and name -->
+</footer>
+
+<!-- ═══ SCRIPTS ═══ -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+//  PARTICLE BACKGROUND
+// ═══════════════════════════════════════════════════════════════════
+
+// ✏️ Hero background particle style:
+//   'stars' | 'network' | 'fireflies' | 'snow' | 'bubbles' | 'none'
+const particleStyle = 'stars';
+
+const particlePresets = {
+    stars: { background:{color:{value:'transparent'}},fpsLimit:60,particles:{number:{value:120,density:{enable:true,area:900}},color:{value:['#ffffff','#e8c547','#aaaaaa']},shape:{type:'circle'},opacity:{value:{min:0.1,max:0.6},animation:{enable:true,speed:0.5,sync:false}},size:{value:{min:1,max:3}},move:{enable:true,speed:0.4,direction:'none',random:true,outModes:'out'},links:{enable:false}},interactivity:{events:{onHover:{enable:true,mode:'grab'},onClick:{enable:true,mode:'push'}},modes:{grab:{distance:140,links:{opacity:0.3}},push:{quantity:3}}},detectRetina:true},
+    network: { background:{color:{value:'transparent'}},fpsLimit:60,particles:{number:{value:60,density:{enable:true,area:900}},color:{value:'#e8c547'},shape:{type:'circle'},opacity:{value:0.4},size:{value:{min:1,max:3}},move:{enable:true,speed:0.6,direction:'none',random:false,outModes:'bounce'},links:{enable:true,distance:160,color:'#e8c547',opacity:0.2,width:1}},interactivity:{events:{onHover:{enable:true,mode:'repulse'},onClick:{enable:true,mode:'push'}},modes:{repulse:{distance:100,duration:0.4},push:{quantity:2}}},detectRetina:true},
+    fireflies: { background:{color:{value:'transparent'}},fpsLimit:60,particles:{number:{value:80,density:{enable:true,area:1000}},color:{value:['#e8c547','#f0d060','#ffaa00']},shape:{type:'circle'},opacity:{value:{min:0.1,max:0.8},animation:{enable:true,speed:1.2,sync:false}},size:{value:{min:1,max:4}},shadow:{enable:true,blur:8,color:'#e8c547'},move:{enable:true,speed:0.8,direction:'none',random:true,straight:false,outModes:'out',warp:true},links:{enable:false}},interactivity:{events:{onHover:{enable:true,mode:'attract'}},modes:{attract:{distance:150,duration:0.4,speed:3}}},detectRetina:true},
+    snow: { background:{color:{value:'transparent'}},fpsLimit:60,particles:{number:{value:100,density:{enable:true,area:900}},color:{value:'#ffffff'},shape:{type:'circle'},opacity:{value:{min:0.1,max:0.5}},size:{value:{min:1,max:4}},move:{enable:true,speed:1.2,direction:'bottom',random:true,straight:false,outModes:'out',wobble:{enable:true,distance:10,speed:5}},links:{enable:false}},interactivity:{events:{onHover:{enable:true,mode:'repulse'}},modes:{repulse:{distance:80,duration:0.4}}},detectRetina:true},
+    bubbles: { background:{color:{value:'transparent'}},fpsLimit:60,particles:{number:{value:50,density:{enable:true,area:900}},color:{value:'#e8c547'},shape:{type:'circle'},opacity:{value:{min:0.05,max:0.3}},size:{value:{min:6,max:30}},stroke:{width:1,color:'#e8c547'},fill:false,move:{enable:true,speed:0.6,direction:'top',random:true,outModes:'out'},links:{enable:false}},interactivity:{events:{onHover:{enable:true,mode:'bubble'},onClick:{enable:true,mode:'repulse'}},modes:{bubble:{distance:200,size:50,duration:2,opacity:0.4},repulse:{distance:150}}},detectRetina:true},
+    none: null
+};
+if (particleStyle !== 'none' && particlePresets[particleStyle]) {
+    tsParticles.load('tsparticles', particlePresets[particleStyle]);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  GALLERIES — STUDENT CUSTOMIZATION
+// ═══════════════════════════════════════════════════════════════════
+
+// ✏️ Gallery 1 animation effect (landscape gallery):
+//   'coverflow' | 'slide' | 'fade' | 'cube' | 'flip' | 'cards'
+const galleryLandscapeEffect = 'coverflow';
+
+// ✏️ Gallery 2 animation effect (portrait gallery):
+//   'cards' | 'slide' | 'fade' | 'cube' | 'coverflow' | 'flip'
+const galleryPortraitEffect = 'cards';
+
+// ═══════════════════════════════════════════════════════════════════
+//  BEFORE / AFTER — STUDENT CUSTOMIZATION
+// ═══════════════════════════════════════════════════════════════════
+
+// ✏️ Choose your animation effect:  'slider' | 'wipe' | 'hover' | 'flip'
+const baEffect = 'slider';
+
+// ✏️ Default ratio for projects without their own ratio set.
+const baDefaultRatio = '16/9';
+
+// ✏️ Your before/after projects. ratio is OPTIONAL per project.
+const baProjects = [
+    { before:'images/before1.jpg', after:'images/after1.jpg', caption:'Project One — new car paint', ratio:'16/9' },
+    { before:'images/before2.jpg', after:'images/after2.jpg', caption:'Project Two — remove the blue cast from a picture',  ratio:'3/4'  },
+    { before:'images/before3.jpg', after:'images/after3.jpg', caption:'Project Three — creative compositing of an old photo into a modern alien image', ratio:'3/4' },
+	{ before:'images/before4.jpg', after:'images/after4.jpg', caption:'Project Four — creative compositing of vaious images', ratio:'16/9' },
+];
+
+// ═══════════════════════════════════════════════════════════════════
+//  EVERYTHING BELOW RUNS AUTOMATICALLY — DO NOT EDIT
+// ═══════════════════════════════════════════════════════════════════
+
+// ── GALLERIES ──
+// 'cards', 'flip', and 'cube' only support one slide at a time — override slidesPerView for those.
+const singleSlideEffects = ['cards', 'flip', 'cube'];
+
+const sharedSwiperOptions = {
+    slidesPerView: 1.2, spaceBetween: 24, centeredSlides: true, loop: true,
+    pagination: { el: '.swiper-pagination', clickable: true },
+    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+    breakpoints: { 640: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
+};
+
+function makeSwiperConfig(effect, galleryId) {
+    const single = singleSlideEffects.includes(effect);
+    return {
+        ...sharedSwiperOptions,
+        effect,
+        // Scope nav & pagination to THIS gallery so the two don't share the same DOM elements
+        pagination: { el: '#' + galleryId + ' .swiper-pagination', clickable: true },
+        navigation: { nextEl: '#' + galleryId + ' .swiper-button-next', prevEl: '#' + galleryId + ' .swiper-button-prev' },
+        // Single-slide effects need slidesPerView:1 or loop breaks
+        ...(single ? { slidesPerView: 1, centeredSlides: true, breakpoints: {} } : {}),
+        coverflowEffect: { rotate: 40, stretch: 0, depth: 120, modifier: 1, slideShadows: false },
+        cubeEffect:      { shadow: true, slideShadows: true, shadowOffset: 20, shadowScale: 0.94 },
+        cardsEffect:     { perSlideOffset: 8, perSlideRotate: 2, rotate: true },
+    };
+}
+
+const swiperLandscape = new Swiper('#gallery-landscape', makeSwiperConfig(galleryLandscapeEffect, 'gallery-landscape'));
+const swiperPortrait  = new Swiper('#gallery-portrait',  makeSwiperConfig(galleryPortraitEffect,  'gallery-portrait'));
+
+// When a single-slide effect is used, the slide expands to 100% of the container.
+// For portrait images that makes the card unreasonably tall — cap the width instead.
+(function() {
+    const caps = { landscape: 780, portrait: 420 };
+    [['gallery-landscape', galleryLandscapeEffect], ['gallery-portrait', galleryPortraitEffect]]
+        .forEach(([id, effect]) => {
+            if (singleSlideEffects.includes(effect)) {
+                const el = document.getElementById(id);
+                el.style.maxWidth  = caps[id.replace('gallery-', '')] + 'px';
+                el.style.marginLeft  = 'auto';
+                el.style.marginRight = 'auto';
+            }
+        });
+})();
+
+// ── LIGHTBOX ──
+(function () {
+    const lb        = document.getElementById('lightbox');
+    const lbImg     = document.getElementById('lb-img');
+    const lbCat     = document.getElementById('lb-category');
+    const lbTitle   = document.getElementById('lb-title');
+    const lbDesc    = document.getElementById('lb-desc');
+    const lbCounter = document.getElementById('lb-counter');
+    const lbClose   = document.getElementById('lb-close');
+    const lbPrev    = document.getElementById('lb-prev');
+    const lbNext    = document.getElementById('lb-next');
+	const lbVideo   = document.getElementById('lb-video');
+    let slides = [], current = 0;
+
+    // Build one deduplicated entry per project using title+category as the key.
+    // This handles Swiper loop clones correctly — clones carry the same data
+    // attributes as their originals, so matching by title+category always finds
+    // the right slide regardless of which DOM copy was clicked.
+    function collectSlides(galleryEl) {
+    const seen = new Set();
+    const root = galleryEl || document.getElementById('projects');
+    slides = [...root.querySelectorAll('.swiper-slide')]
+        .filter(s => {
+            const key = (s.dataset.title || '') + '|' + (s.dataset.category || '');
+            if (!key || key === '|' || seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        });
+}
+
+    function preload(index) {
+        const i = ((index % slides.length) + slides.length) % slides.length;
+        const img = slides[i] && slides[i].querySelector('.slide-img-wrap img');
+        if (img) { const p = new Image(); p.src = img.src; }
+    }
+
+    function updateLightbox(index) {
+    current = ((index % slides.length) + slides.length) % slides.length;
+    const s   = slides[current];
+    const img = s.querySelector('.slide-img-wrap img');
+    const vid = s.querySelector('.slide-img-wrap video');
+    if (vid) {
+        lbImg.style.display   = 'none';
+        lbVideo.style.display = 'block';
+        lbVideo.src           = vid.src;
+    } else {
+        lbVideo.pause();
+        lbVideo.style.display = 'none';
+        lbVideo.src           = '';
+        lbImg.style.display   = 'block';
+        lbImg.src             = img ? img.src : '';
+        lbImg.alt             = img ? img.alt : '';
+    }
+    lbCat.textContent     = s.dataset.category || '';
+    lbTitle.textContent   = s.dataset.title    || '';
+    lbDesc.textContent    = s.dataset.desc     || '';
+    lbCounter.textContent = `${current + 1} / ${slides.length}`;
+    if (slides.length > 1) { preload(current + 1); preload(current - 1); }
+}
+
+   function openLightbox(slideEl) {
+    // Scope the slide list to whichever gallery was clicked
+    const gallery = slideEl.closest('#gallery-landscape') || slideEl.closest('#gallery-portrait');
+    collectSlides(gallery);
+    if (!slides.length) return;
+    const title = slideEl.dataset.title    || '';
+    const cat   = slideEl.dataset.category || '';
+    let idx = slides.findIndex(s => s.dataset.title === title && s.dataset.category === cat);
+    if (idx === -1) idx = 0;
+    updateLightbox(idx);
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+    // Expose globally so inline onclick attributes on slides can call it directly.
+    window.__lbOpen = openLightbox;
+
+    function closeLightbox() {
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+    lbVideo.pause();
+    lbVideo.src = '';
+}
+    function next() { if (slides.length) updateLightbox(current + 1); }
+    function prev() { if (slides.length) updateLightbox(current - 1); }
+
+    lbClose.addEventListener('click', closeLightbox);
+    lbNext.addEventListener('click', next);
+    lbPrev.addEventListener('click', prev);
+    lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+    document.addEventListener('keydown', e => {
+        if (!lb.classList.contains('open')) return;
+        if (e.key === 'Escape')      closeLightbox();
+        if (e.key === 'ArrowRight')  next();
+        if (e.key === 'ArrowLeft')   prev();
+    });
+
+    // Touch swipe on the lightbox image
+    let startX = 0;
+    lbImg.addEventListener('touchstart', e => { startX = e.touches[0].clientX; });
+    lbImg.addEventListener('touchend',   e => {
+        const diff = e.changedTouches[0].clientX - startX;
+        if (Math.abs(diff) > 50) { diff < 0 ? next() : prev(); }
+    });
+
+})();
+
+// Hook into Swiper's click AND tap events.
+// tap fires through Swiper's internal touch system and works where click
+// may not (e.g. coverflow with loop disabled).
+// Falls back to the active slide when event.target can't be resolved.
+[swiperLandscape, swiperPortrait].forEach(function (sw) {
+    function handleInteraction(swiper, event) {
+        const slide = (event && event.target && event.target.closest
+                        ? event.target.closest('.swiper-slide')
+                        : null)
+                      || swiper.slides[swiper.activeIndex];
+        if (slide && window.__lbOpen) window.__lbOpen(slide);
+    }
+    sw.on('click', handleInteraction);
+    sw.on('tap',   handleInteraction);
+});
+
+// ── BEFORE / AFTER ──
+let activeProject = 0;
+function getImgTag(src, alt) {
+    const ph = encodeURIComponent('Add to images folder: ' + src.replace('images/',''));
+    return `<img src="${src}" alt="${alt}" onerror="this.src='https://placehold.co/860x480/1a1a1a/888?text=${ph}';">`;
+}
+function buildBA() {
+    const container = document.getElementById('ba-container');
+    const p = baProjects[activeProject];
+    const ratio = (p.ratio && p.ratio !== '') ? p.ratio : baDefaultRatio;
+    let html = '';
+    if (baEffect==='slider'){html=`<div class="ba-wrapper mode-slider" id="ba-wrapper" style="aspect-ratio:${ratio}"><div class="ba-before">${getImgTag(p.before,'Before')}</div><div class="ba-after">${getImgTag(p.after,'After')}</div><div class="ba-handle" id="ba-handle"><div class="ba-handle-line"></div><div class="ba-handle-circle">&#x2194;</div></div><span class="ba-label label-before">Before</span><span class="ba-label label-after">After</span></div>`;}
+    else if (baEffect==='wipe'){html=`<div class="ba-wrapper mode-wipe" style="aspect-ratio:${ratio}"><div class="ba-before">${getImgTag(p.before,'Before')}</div><div class="ba-after">${getImgTag(p.after,'After')}</div><span class="ba-label label-before">Before</span><span class="ba-label label-after">After</span></div>`;}
+    else if (baEffect==='hover'){html=`<div class="ba-wrapper mode-hover" style="aspect-ratio:${ratio}"><div class="ba-before">${getImgTag(p.before,'Before')}</div><div class="ba-after">${getImgTag(p.after,'After')}</div><span class="ba-label label-before">Hover to reveal</span></div>`;}
+    else if (baEffect==='flip'){html=`<div class="ba-wrapper mode-flip" style="aspect-ratio:${ratio}" onclick="this.classList.toggle('flipped')"><div class="flip-inner"><div class="flip-front">${getImgTag(p.before,'Before')}<span class="ba-label label-before">Click to flip</span></div><div class="flip-back">${getImgTag(p.after,'After')}<span class="ba-label label-after">Click to flip back</span></div></div></div>`;}
+    container.innerHTML = html;
+    document.getElementById('ba-caption').textContent = p.caption;
+    if (baEffect === 'slider') initSlider();
+}
+function switchBAProject(index) {
+    activeProject = index;
+    document.querySelectorAll('.ba-tab').forEach((btn, i) => btn.classList.toggle('active', i === index));
+    buildBA();
+}
+function initSlider() {
+    const wrapper=document.getElementById('ba-wrapper'); if(!wrapper) return;
+    const after=wrapper.querySelector('.ba-after'),handle=wrapper.querySelector('.ba-handle');
+    function setPos(clientX){const rect=wrapper.getBoundingClientRect();let pct=((clientX-rect.left)/rect.width)*100;pct=Math.max(2,Math.min(98,pct));after.style.clipPath=`inset(0 ${100-pct}% 0 0)`;handle.style.left=pct+'%';}
+    let dragging=false;
+    handle.addEventListener('mousedown',()=>dragging=true);
+    window.addEventListener('mouseup',()=>dragging=false);
+    window.addEventListener('mousemove',e=>{if(dragging)setPos(e.clientX);});
+    handle.addEventListener('touchstart',e=>{dragging=true;e.preventDefault();},{passive:false});
+    window.addEventListener('touchend',()=>dragging=false);
+    window.addEventListener('touchmove',e=>{if(dragging)setPos(e.touches[0].clientX);},{passive:true});
+}
+
+// ── AOS ──
+AOS.init({ duration: 800, once: true, offset: 80 });
+
+// ── NAV scroll ──
+window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// ── BUILD BEFORE/AFTER ──
+buildBA();
+</script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Before & After Effects Picker</title>
+<style>
+:root { --bg:#0d0d0d; --card:#1a1a1a; --accent:#e8c547; --muted:#888; --border:#2a2a2a; --demo-ratio:16/9; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#f0f0f0;padding:2rem;}
+h1{font-size:1.6rem;color:var(--accent);margin-bottom:.3rem;}
+.subtitle{color:var(--muted);font-size:.95rem;margin-bottom:1.5rem;}
+.toolbar{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem;margin-bottom:1.5rem;}
+.toolbar label{font-size:.8rem;color:var(--muted);display:block;margin-bottom:.3rem;}
+.toolbar input{background:#111;border:1px solid var(--border);color:#f0f0f0;padding:.45rem .75rem;border-radius:4px;font-size:.85rem;width:190px;}
+.toolbar button.apply-btn{background:var(--accent);color:#000;border:none;padding:.55rem 1.3rem;border-radius:4px;cursor:pointer;font-weight:700;font-size:.85rem;margin-top:1.25rem;}
+.toolbar button.apply-btn:hover{background:#f0d060;}
+.orient-group{display:flex;gap:.5rem;align-items:flex-end;}
+.orient-btn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:.45rem .85rem;border-radius:4px;cursor:pointer;font-size:.8rem;transition:all .18s;}
+.orient-btn.active,.orient-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(232,197,71,.08);}
+.folder-note{background:rgba(232,197,71,.08);border:1px solid rgba(232,197,71,.25);border-radius:6px;padding:.6rem 1rem;font-size:.82rem;color:var(--accent);margin-bottom:1.5rem;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+@media(max-width:800px){.grid{grid-template-columns:1fr;}}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.panel-header{display:flex;justify-content:space-between;align-items:center;padding:.9rem 1.1rem;border-bottom:1px solid var(--border);}
+.panel-title{font-weight:700;font-size:1rem;color:#f0f0f0;}
+.panel-badge{font-size:.7rem;padding:.25rem .65rem;border-radius:12px;background:rgba(232,197,71,.12);color:var(--accent);border:1px solid rgba(232,197,71,.3);}
+.panel-body{padding:1rem;}
+.demo-area{position:relative;width:100%;aspect-ratio:var(--demo-ratio);border-radius:6px;overflow:hidden;border:1px solid var(--border);user-select:none;}
+.demo-before{position:absolute;inset:0;}.demo-after{position:absolute;inset:0;}
+.demo-before .bg{width:100%;height:100%;background:linear-gradient(135deg,#1a237e,#4a148c);}
+.demo-after .bg{width:100%;height:100%;background:linear-gradient(135deg,#e65100,#f9a825);}
+.ba-label{position:absolute;top:10px;padding:3px 10px;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;border-radius:3px;z-index:20;background:rgba(0,0,0,.65);color:var(--accent);pointer-events:none;}
+.label-before{left:10px;}.label-after{right:10px;}
+.demo-slider .demo-after{clip-path:inset(0 50% 0 0);}
+.demo-slider .handle{position:absolute;top:0;left:50%;transform:translateX(-50%);width:38px;height:100%;z-index:10;cursor:ew-resize;display:flex;align-items:center;justify-content:center;}
+.demo-slider .handle-line{width:3px;height:100%;background:var(--accent);}
+.demo-slider .handle-circle{position:absolute;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#000;font-size:1rem;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.5);}
+.demo-wipe .demo-after{clip-path:inset(0 100% 0 0);animation:wipe 3s ease-in-out infinite alternate;}
+@keyframes wipe{0%{clip-path:inset(0 100% 0 0);}40%{clip-path:inset(0 0% 0 0);}60%{clip-path:inset(0 0% 0 0);}100%{clip-path:inset(0 100% 0 0);}}
+.demo-hover .demo-after{opacity:0;transition:opacity .5s ease;}
+.demo-hover:hover .demo-after{opacity:1;}
+.demo-flip{perspective:900px;cursor:pointer;}
+.demo-flip .flip-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.4,0,.2,1);}
+.demo-flip.flipped .flip-inner{transform:rotateY(180deg);}
+.flip-front,.flip-back{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+.flip-back{transform:rotateY(180deg);}
+.flip-front .bg{width:100%;height:100%;background:linear-gradient(135deg,#1a237e,#4a148c);}
+.flip-back .bg{width:100%;height:100%;background:linear-gradient(135deg,#e65100,#f9a825);}
+.panel-desc{font-size:.83rem;color:var(--muted);margin:.85rem 0;line-height:1.55;}
+.get-code-btn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:.4rem 1rem;border-radius:4px;cursor:pointer;font-size:.8rem;transition:all .18s;width:100%;}
+.get-code-btn:hover{border-color:var(--accent);color:var(--accent);}
+.code-reveal{display:none;margin-top:.75rem;background:#111;border:1px solid var(--border);border-radius:6px;padding:.75rem 1rem;}
+.code-reveal.open{display:block;}
+.code-line{font-family:'Courier New',monospace;font-size:.82rem;color:var(--accent);}
+.copy-btn{margin-top:.5rem;background:var(--accent);color:#000;border:none;padding:.35rem .9rem;border-radius:4px;cursor:pointer;font-size:.78rem;font-weight:700;}
+.copy-btn:hover{background:#f0d060;}
+</style>
+</head>
+<body>
+<h1>Before & After Effects Picker</h1>
+<p class="subtitle">Preview all four effects live — type your image filenames below to test with your own artwork.</p>
+<div class="toolbar">
+    <div><label>Before image filename</label><input type="text" id="before-input" placeholder="before1.jpg"></div>
+    <div><label>After image filename</label><input type="text" id="after-input" placeholder="after1.jpg"></div>
+    <button class="apply-btn" onclick="applyImages()">Preview My Images</button>
+    <div class="orient-group"><div><label>Orientation</label>
+    <div style="display:flex;gap:.5rem;">
+        <button class="orient-btn active" onclick="setOrientation('16/9',this)">Landscape</button>
+        <button class="orient-btn" onclick="setOrientation('3/4',this)">Portrait</button>
+        <button class="orient-btn" onclick="setOrientation('1/1',this)">Square</button>
+        <button class="orient-btn" onclick="setOrientation('4/3',this)">Classic</button>
+    </div></div></div>
+</div>
+<div class="folder-note">📁 Remember: your images must be saved inside the <strong>images/</strong> subfolder of your portfolio folder.</div>
+<div class="grid">
+    <div class="panel">
+        <div class="panel-header"><span class="panel-title">Slider</span><span class="panel-badge">Interactive</span></div>
+        <div class="panel-body">
+            <div class="demo-area demo-slider" id="demo-slider">
+                <div class="demo-before"><div class="bg"></div></div><div class="demo-after"><div class="bg"></div></div>
+                <div class="handle"><div class="handle-line"></div><div class="handle-circle">&#x2194;</div></div>
+                <span class="ba-label label-before">Before</span><span class="ba-label label-after">After</span>
+            </div>
+            <p class="panel-desc">Visitors drag a handle left and right to personally reveal the transformation.</p>
+            <button class="get-code-btn" onclick="toggleCode('code-slider',this)">Get the Code</button>
+            <div class="code-reveal" id="code-slider"><div class="code-line">const baEffect = 'slider';</div><button class="copy-btn" onclick="copyCode('slider')">Copy</button></div>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-header"><span class="panel-title">Auto-Wipe</span><span class="panel-badge">Animated</span></div>
+        <div class="panel-body">
+            <div class="demo-area demo-wipe" id="demo-wipe">
+                <div class="demo-before"><div class="bg"></div></div><div class="demo-after"><div class="bg"></div></div>
+                <span class="ba-label label-before">Before</span><span class="ba-label label-after">After</span>
+            </div>
+            <p class="panel-desc">A curtain automatically sweeps back and forth on a loop. Perfect for Arts Night.</p>
+            <button class="get-code-btn" onclick="toggleCode('code-wipe',this)">Get the Code</button>
+            <div class="code-reveal" id="code-wipe"><div class="code-line">const baEffect = 'wipe';</div><button class="copy-btn" onclick="copyCode('wipe')">Copy</button></div>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-header"><span class="panel-title">Hover Reveal</span><span class="panel-badge">Elegant</span></div>
+        <div class="panel-body">
+            <div class="demo-area demo-hover" id="demo-hover">
+                <div class="demo-before"><div class="bg"></div></div><div class="demo-after"><div class="bg"></div></div>
+                <span class="ba-label label-before">Hover to reveal</span>
+            </div>
+            <p class="panel-desc">Before shows by default. Hovering crossfades to the after image.</p>
+            <button class="get-code-btn" onclick="toggleCode('code-hover',this)">Get the Code</button>
+            <div class="code-reveal" id="code-hover"><div class="code-line">const baEffect = 'hover';</div><button class="copy-btn" onclick="copyCode('hover')">Copy</button></div>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-header"><span class="panel-title">Card Flip</span><span class="panel-badge">Dramatic</span></div>
+        <div class="panel-body">
+            <div class="demo-area demo-flip" id="demo-flip" onclick="this.classList.toggle('flipped')">
+                <div class="flip-inner">
+                    <div class="flip-front"><div class="bg"></div><span class="ba-label label-before">Click to flip</span></div>
+                    <div class="flip-back"><div class="bg"></div><span class="ba-label label-after">Click to flip back</span></div>
+                </div>
+            </div>
+            <p class="panel-desc">The image flips like a physical card — before on front, after on back.</p>
+            <button class="get-code-btn" onclick="toggleCode('code-flip',this)">Get the Code</button>
+            <div class="code-reveal" id="code-flip"><div class="code-line">const baEffect = 'flip';</div><button class="copy-btn" onclick="copyCode('flip')">Copy</button></div>
+        </div>
+    </div>
+</div>
+<script>
+(function(){const w=document.getElementById('demo-slider'),a=w.querySelector('.demo-after'),h=w.querySelector('.handle');let d=false;function s(x){const r=w.getBoundingClientRect();let p=((x-r.left)/r.width)*100;p=Math.max(2,Math.min(98,p));a.style.clipPath=`inset(0 ${100-p}% 0 0)`;h.style.left=p+'%';}h.addEventListener('mousedown',()=>d=true);window.addEventListener('mouseup',()=>d=false);window.addEventListener('mousemove',e=>{if(d)s(e.clientX);});h.addEventListener('touchstart',e=>{d=true;e.preventDefault();},{passive:false});window.addEventListener('touchend',()=>d=false);window.addEventListener('touchmove',e=>{if(d)s(e.touches[0].clientX);},{passive:true});})();
+function setOrientation(r,btn){document.documentElement.style.setProperty('--demo-ratio',r);document.querySelectorAll('.orient-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.demo-area').forEach(el=>el.style.aspectRatio=r);}
+function applyImages(){const bf=document.getElementById('before-input').value.trim(),af=document.getElementById('after-input').value.trim();if(!bf||!af){alert('Please enter both filenames.');return;}document.querySelectorAll('.demo-before .bg').forEach(el=>{el.outerHTML=`<img src="images/${bf}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.background='linear-gradient(135deg,#1a237e,#4a148c)';this.style.width='100%';this.style.height='100%';">`;});document.querySelectorAll('.demo-after .bg,.flip-back .bg').forEach(el=>{el.outerHTML=`<img src="images/${af}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.background='linear-gradient(135deg,#e65100,#f9a825)';this.style.width='100%';this.style.height='100%';">`;});document.querySelectorAll('.flip-front .bg').forEach(el=>{el.outerHTML=`<img src="images/${bf}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.background='linear-gradient(135deg,#1a237e,#4a148c)';this.style.width='100%';this.style.height='100%';">`;});}
+function toggleCode(id,btn){const el=document.getElementById(id);const open=el.classList.toggle('open');btn.textContent=open?'Hide Code':'Get the Code';}
+function copyCode(e){navigator.clipboard.writeText(`const baEffect='${e}';`).then(()=>alert('Copied!')).catch(()=>alert(`const baEffect='${e}';`));}
+</script>
+</body>
+</html>
