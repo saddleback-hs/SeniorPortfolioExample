@@ -197,6 +197,7 @@ section { padding: 100px 2rem; }
 .ba-tab { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: .55rem 1.4rem; border-radius: 4px; cursor: pointer; font-family: var(--font-body); font-size: .9rem; transition: all .2s; }
 .ba-tab.active, .ba-tab:hover { border-color: var(--accent); color: var(--accent); background: rgba(232,197,71,.08); }
 .ba-wrapper { position: relative; width: 100%; max-width: 860px; aspect-ratio: var(--ba-ratio); margin: 0 auto; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); user-select: none; }
+.ba-wrapper img { -webkit-user-drag: none; user-drag: none; pointer-events: none; }
 
 /* ── SLIDER EFFECT ── */
 .ba-wrapper.mode-slider .ba-before, .ba-wrapper.mode-slider .ba-after { position: absolute; inset: 0; }
@@ -1045,9 +1046,9 @@ function initSlider() {
     const after=wrapper.querySelector('.ba-after'),handle=wrapper.querySelector('.ba-handle');
     function setPos(clientX){const rect=wrapper.getBoundingClientRect();let pct=((clientX-rect.left)/rect.width)*100;pct=Math.max(2,Math.min(98,pct));after.style.clipPath=`inset(0 ${100-pct}% 0 0)`;handle.style.left=pct+'%';}
     let dragging=false;
-    handle.addEventListener('mousedown',()=>dragging=true);
+    handle.addEventListener('mousedown',e=>{dragging=true;e.preventDefault();});
     window.addEventListener('mouseup',()=>dragging=false);
-    window.addEventListener('mousemove',e=>{if(dragging)setPos(e.clientX);});
+    window.addEventListener('mousemove',e=>{if(dragging){e.preventDefault();setPos(e.clientX);}});
     handle.addEventListener('touchstart',e=>{dragging=true;e.preventDefault();},{passive:false});
     window.addEventListener('touchend',()=>dragging=false);
     window.addEventListener('touchmove',e=>{if(dragging)setPos(e.touches[0].clientX);},{passive:true});
