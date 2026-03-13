@@ -196,8 +196,8 @@ section { padding: 100px 2rem; }
 .ba-project-tabs { display: flex; gap: .75rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
 .ba-tab { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: .55rem 1.4rem; border-radius: 4px; cursor: pointer; font-family: var(--font-body); font-size: .9rem; transition: all .2s; }
 .ba-tab.active, .ba-tab:hover { border-color: var(--accent); color: var(--accent); background: rgba(232,197,71,.08); }
-.ba-wrapper { position: relative; width: 100%; max-width: 860px; aspect-ratio: var(--ba-ratio); margin: 0 auto; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); user-select: none; }
-.ba-wrapper img { -webkit-user-drag: none; user-drag: none; pointer-events: none; }
+.ba-wrapper { position: relative; width: 100%; max-width: 860px; aspect-ratio: var(--ba-ratio); margin: 0 auto; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); user-select: none; -webkit-user-select: none; }
+.ba-wrapper img { -webkit-user-drag: none; user-drag: none; pointer-events: none; -webkit-user-select: none; user-select: none; }
 
 /* ── SLIDER EFFECT ── */
 .ba-wrapper.mode-slider .ba-before, .ba-wrapper.mode-slider .ba-after { position: absolute; inset: 0; }
