@@ -152,6 +152,20 @@ section { padding: 100px 2rem; }
 .swiper-pagination-bullet { background: var(--accent); }
 .swiper-button-next, .swiper-button-prev { color: var(--accent); }
 
+/* ── Portrait gallery — custom nav buttons flanking the card stack ── */
+.portrait-outer { display: flex; align-items: center; justify-content: center; gap: 20px; }
+.portrait-nav-btn {
+  flex-shrink: 0;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  color: var(--accent); font-size: 1.3rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background .2s, color .2s;
+  font-family: var(--font-body);
+}
+.portrait-nav-btn:hover { background: var(--accent); color: #000; }
+
 /* ── STUDENT INFO BAR ── */
 #student-info-bar {
     position: fixed; top: 0; left: 0; z-index: 1001;
@@ -586,7 +600,9 @@ footer { background: var(--bg-secondary); border-top: 1px solid var(--border); p
         <p class="gallery-sub-label" data-aos="fade-up">Gallery Two</p>
         <h3 class="gallery-sub-heading" data-aos="fade-up" data-aos-delay="80">Portrait Work</h3><!-- ✏️ rename this gallery -->
 
-        <div class="swiper" id="gallery-portrait" data-aos="fade-up" data-aos-delay="200">
+        <div class="portrait-outer" data-aos="fade-up" data-aos-delay="200">
+          <button class="portrait-nav-btn" onclick="swiperPortrait.slidePrev()" aria-label="Previous">&#8592;</button>
+          <div class="swiper" id="gallery-portrait">
             <div class="swiper-wrapper">
 
                 <!-- ✏️ PORTRAIT PROJECT 1 -->
@@ -770,8 +786,8 @@ footer { background: var(--bg-secondary); border-top: 1px solid var(--border); p
 
             </div>
             <div class="swiper-pagination"></div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
+          </div>
+          <button class="portrait-nav-btn" onclick="swiperPortrait.slideNext()" aria-label="Next">&#8594;</button>
         </div>
 
     </div>
@@ -839,13 +855,13 @@ const studentID     = '123456'; // ✏️ Replace with your student ID, e.g., '1
 //   'stars' | 'network' | 'fireflies' | 'snow' | 'bubbles'
 //   'embers' | 'confetti' | 'aurora' | 'rain' | 'neon' | 'dust' | 'sparkles' | 'none'
 //   (* aurora uses a canvas renderer — particleColor sets hue, particleSpeed controls pace)
-const particleStyle   = 'neon';
+const particleStyle   = 'stars';
 
 // ✏️ Color — tip: use your --accent color for a cohesive look, e.g. '#e8c547'
 const particleColor   = '#e8c547';
 
 // ✏️ Speed — 0.2 = very slow / 0.5 = default / 2.0 = fast
-const particleSpeed   = 0.2;
+const particleSpeed   = 0.4;
 
 // ✏️ Count — number of particles on screen. 60 = sparse / 120 = default / 200 = dense
 const particleCount   = 120;
@@ -908,7 +924,7 @@ function initAurora(hexColor, speed) {
         { dh: 180, yF: 0.28, amp: 0.07, freq: 1.6, ph: 0.6,  spd: 0.00028 },
         { dh: 200, yF: 0.58, amp: 0.09, freq: 1.1, ph: 2.1,  spd: 0.00020 },
     ];
-    const speedMul = Math.max(0.01, speed);
+    const speedMul = Math.max(0.1, speed);
 
     ctx.globalCompositeOperation = 'screen';
 
@@ -1029,7 +1045,12 @@ function makeSwiperConfig(effect, galleryId) {
 }
 
 const swiperLandscape = new Swiper('#gallery-landscape', makeSwiperConfig(galleryLandscapeEffect, 'gallery-landscape'));
-const swiperPortrait  = new Swiper('#gallery-portrait',  makeSwiperConfig(galleryPortraitEffect,  'gallery-portrait'));
+const swiperPortrait = new Swiper('#gallery-portrait', {
+  ...makeSwiperConfig(galleryPortraitEffect, 'gallery-portrait'),
+  loop: false,       // cards effect + loop:true causes Swiper v11 conflicts
+  rewind: true,      // rewind gives seamless cycling without loop glitches
+  navigation: false, // custom HTML buttons call slideNext/Prev directly
+});
 
 // When a single-slide effect is used, the slide expands to 100% of the container.
 // For portrait images that makes the card unreasonably tall — cap the width instead.
